@@ -1,0 +1,22 @@
+name: CI
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: Build template (WASM)
+        run: cargo build --locked --release --target wasm32-unknown-unknown
+      - name: Clippy (template)
+        run: cargo clippy --locked --release --target wasm32-unknown-unknown -- -D warnings
+      - name: Engine tests
+        run: cargo test --locked
+      - name: Live client builds
+        run: cargo build --locked --example live_esmeralda
