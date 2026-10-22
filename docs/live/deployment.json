@@ -1,0 +1,22 @@
+{
+ "template": "28d535823f9d60f5394727f2cde709b3d8ffbd0118e22efea8d7990a94d89e05",
+ "component": "component_3f3565e50bd991406173ee18662f5e17b1282be42e4f2eed85d82f69445157b7",
+ "resource": "resource_3f13083b05ebb6d88a54d6ac904f37e06c1a1ffda483a78eda4f2597e0e0704d",
+ "publish_tx": "ba2bd3e82d0ee3053eb2c422976eca3cb1ac4763792f8cf703b1c972cfe5e8cb",
+ "new_tx": "2a067587a87600a6c0d75bcbdabc0ebe01cb3b4381d8461f8a5d61099ff0dac3",
+ "round_tx": "fe39987741d91b97046e516e47806fd89ac8e644fd12525e1a664423fbe94d2b",
+ "households": {
+  "household_A": "component_1fa200e8d6010ac6173100f4ab4abbe6789b216f863c7cbbb971db043478f1cb",
+  "household_B": "component_f25af0d64a1cbe4cbdbe1cea7413c4907301aec1faf30f1ed778104a8fbbbf7d",
+  "household_C": "component_3532583b0304baed1cd8b6435953912c71b074e55bad880d2bd07599c6a6541c"
+ },
+ "cohorts": {
+  "household_A": "district-3",
+  "household_B": "district-3",
+  "household_C": "district-4"
+ },
+ "dupe_rejection": "Template error: Household is already enrolled (duplicate enrolment tag)",
+ "programme": "Riverside flood relief 2026 (testnet demo)",
+ "round_label": "Round 1: shelter and food",
+ "funds_raised": 10000
+}
