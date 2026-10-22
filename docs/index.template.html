@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hearth · dignified, confidential cash aid</title>
+<meta name="description" content="Donors see a provable total. An auditor reconciles every grant. Nobody can read what any family received. Live on the Tari Ootle testnet.">
+<style>
+:root{--bg:#0f0d0a;--card:#1a1611;--line:#33291d;--ink:#f3ece2;--dim:#a89a86;--ember:#ff8a3d;--gold:#f6c453;--green:#64d68f;--red:#ff6b6b;--blue:#8ec5ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(1100px 560px at 75% -10%,#3a2412 0,var(--bg) 62%);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1060px;margin:0 auto;padding:30px 20px 80px}
+h1{font-size:42px;margin:6px 0 4px;letter-spacing:-.5px}h1 span{color:var(--ember)}
+h2{font-size:22px;margin:34px 0 10px}
+.sub{color:var(--dim);margin:0 0 18px;max-width:800px;font-size:17px}
+.badge{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:12px;color:var(--dim);margin:0 6px 6px 0}
+.why{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:10px 0 4px}
+.why div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;font-size:14px;color:var(--dim)}.why b{color:var(--ink);display:block;font-size:15px;margin-bottom:4px}
+.roles{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 8px}
+.role-b{cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:11px 15px;min-width:180px;text-align:left}
+.role-b b{display:block;font-size:15px}.role-b small{color:var(--dim)}
+.role-b.on{border-color:var(--ember);box-shadow:0 0 0 1px var(--ember),0 0 26px -6px var(--ember)}
+.explain{color:var(--dim);min-height:50px;margin:6px 0 14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.card h3{margin:0 0 2px;font-size:18px}.meta{color:var(--dim);font-size:13px;margin-bottom:10px}
+.row{display:flex;justify-content:space-between;gap:10px;border-top:1px dashed var(--line);padding:8px 0;font-size:14px}.row span:first-child{color:var(--dim)}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;word-break:break-all}
+.amt{font-size:26px;font-weight:700;margin:4px 0}.sealed{color:var(--red)}.open{color:var(--green)}.vk{color:var(--gold)}
+.ok{color:var(--green);font-weight:700}.bad{color:var(--red);font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}th{color:var(--dim);font-weight:500}
+a{color:var(--blue)}footer{color:var(--dim);font-size:13px;margin-top:36px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}@media(max-width:780px){.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body><div class="wrap">
+<span class="badge">Web3 for Social Good 2026</span><span class="badge">Tari Ootle</span><span class="badge">MIT</span><span class="badge" style="color:var(--green);border-color:var(--green)">● live on Esmeralda testnet</span>
+<h1>🔥 <span>Hearth</span></h1>
+<p class="sub">Dignified, confidential cash aid. Donors see a provable total and every round that was paid. An auditor reconciles every unit. <b>Nobody can read what any family received</b>, because on a public ledger a grant size can reveal a family's size, illness or protection status.</p>
+
+<div class="why">
+ <div><b>🧾 Donors trust the books</b>Funds raised are public and provable. The auditor's view key opens every grant and the treasury, so Σ grants + treasury = funds raised, with no power to spend.</div>
+ <div><b>🛡️ Families stay safe</b>Grants are Pedersen commitments. No amount appears in state, events or receipts. The template rejects any grant that would reveal one.</div>
+ <div><b>🚫 No double-dipping, no PII</b>Each household is enrolled with a salted hash of its registration ID. A second wallet with the same hash is refused on-chain. No names, no IDs.</div>
+ <div><b>📱 Lost phone? Keep your place</b><code>replace_wallet</code> moves an enrolment to a new phone without creating a second entitlement.</div>
+</div>
+
+<h2>See the same round through five different eyes</h2>
+<div class="roles" id="roles"></div>
+<div class="explain" id="explain"></div>
+<div class="grid" id="fams"></div>
+
+<div class="two">
+ <div class="card" id="books"></div>
+ <div class="card" id="impact"></div>
+</div>
+
+<div class="card" style="margin-top:14px;border-color:var(--green)">
+ <h3>🟢 Every number on this page is from the public testnet</h3>
+ <div class="meta">Published, opened and paid on the Tari Ootle Esmeralda testnet. Read back from the public indexer with each party's key (<span class="mono">cargo run --example live_esmeralda -- verify …</span>). Open any link in the <a href="https://explorer.tari.mw">Veil explorer</a>.</div>
+ <table id="live"></table>
+</div>
+
+<footer>Hearth is open source (MIT): <a href="https://github.com/XachP/hearth-aid">github.com/XachP/hearth-aid</a> · 20 engine tests · threat model · built with the help of an AI coding agent. The page decrypts nothing itself; it shows the results of the live verifier run.</footer>
+</div>
+<script>
+const LIVE=/*LIVE*/null, V=/*VERIFY*/null;
+const s=h=>h.length>22?h.slice(0,12)+"…"+h.slice(-6):h;
+const ex=(k,id)=>`https://explorer.tari.mw/${k}/${id}`;
+const fams=V.outputs.filter(o=>o.holder.startsWith("household")).sort((a,b)=>a.holder.localeCompare(b.holder));
+const treas=V.outputs.find(o=>o.holder=="hearth");
+const R=[
+ {id:"public",icon:"👁",name:"The public",sub:"neighbours, armed groups, data brokers",explain:"Anyone with a block explorer sees that three households in district-3/4 were enrolled and that Round 1 paid 3 grants out of a public 10,000 raised. Every grant is an opaque commitment."},
+ {id:"family",icon:"🔑",name:"Household A",sub:"its own phone key",explain:"Household A's key opens the encrypted grant notice on its own output: the amount, the mask and a private note, straight from the chain. Its neighbours' grants stay sealed."},
+ {id:"auditor",icon:"📜",name:"Donor's auditor",sub:"resource view key",explain:"The view key fixed on the HEARTH token opens every amount, so the books reconcile to the unit. It cannot open the private notes and cannot move a single coin."},
+ {id:"neighbour",icon:"🏘",name:"Household B, curious",sub:"a different family's key",explain:"Being in the same programme gives Household B no window into anyone else's grant. Its key opens only its own."},
+ {id:"fraud",icon:"🦹",name:"A double-dipper",sub:"same family, second wallet",explain:"Someone tries to enrol Household A's registration again under another wallet to collect twice. The live template refuses it, without ever learning who Household A is."}
+];
+let cur=(location.hash||"#public").slice(1);if(!R.some(r=>r.id==cur))cur="public";
+function render(){
+ document.getElementById("roles").innerHTML=R.map(r=>`<button class="role-b ${r.id==cur?"on":""}" data-id="${r.id}"><b>${r.icon} ${r.name}</b><small>${r.sub}</small></button>`).join("");
+ document.querySelectorAll(".role-b").forEach(b=>b.onclick=()=>{cur=b.dataset.id;history.replaceState(null,"","#"+cur);render()});
+ document.getElementById("explain").textContent=R.find(r=>r.id==cur).explain;
+ document.getElementById("fams").innerHTML=fams.map(o=>{
+  const name=o.holder.replace("household_","Household "), mine=o.holder=="household_A", nb=o.holder=="household_B";
+  let amt,memo;
+  if(cur=="family"){amt=mine?`<span class="open">${o.grant_notice.amount} HEARTH</span>`:`<span class="sealed">hidden</span>`;memo=mine?`<span class="open">“${o.grant_notice.memo}”</span>`:`<span class="sealed">sealed</span>`}
+  else if(cur=="neighbour"){amt=nb?`<span class="open">${o.grant_notice.amount} HEARTH</span>`:`<span class="sealed">nothing</span>`;memo=nb?`<span class="open">“${o.grant_notice.memo}”</span>`:`<span class="sealed">sealed</span>`}
+  else if(cur=="auditor"){amt=`<span class="vk">${o.auditor_view_key_reads} HEARTH</span>`;memo=`<span class="sealed">sealed (view key ≠ family key)</span>`}
+  else {amt=`<span class="sealed">████ hidden</span>`;memo=`<span class="sealed">sealed ciphertext</span>`}
+  return `<div class="card"><h3>${name}</h3><div class="meta">cohort <b>${LIVE.cohorts[o.holder]}</b> · enrolled with a salted hash, no name</div>
+  <div class="amt">${amt}</div>
+  <div class="row"><span>grant notice</span><span>${memo}</span></div>
+  <div class="row"><span>on-chain commitment</span><span class="mono">${s(o.commitment)}</span></div>
+  <div class="row"><span>wallet</span><span class="mono"><a href="${ex("substate",LIVE.households[o.holder])}">${s(LIVE.households[o.holder])}</a></span></div></div>`}).join("");
+ const total=fams.reduce((a,o)=>a+o.auditor_view_key_reads,0)+treas.auditor_view_key_reads;
+ document.getElementById("books").innerHTML = cur=="auditor"
+  ? `<h3>📜 The auditor reconciles</h3><div class="meta">Σ grants + treasury must equal the public funds raised.</div>${fams.map(o=>`<div class="row"><span>${o.holder.replace("_"," ")}</span><span>${o.auditor_view_key_reads}</span></div>`).join("")}<div class="row"><span>treasury (unspent)</span><span>${treas.auditor_view_key_reads}</span></div><div class="row"><span><b>total</b></span><span><b>${total}</b> = funds raised ${LIVE.funds_raised} <span class="ok">✔</span></span></div>`
+  : cur=="fraud"
+  ? `<h3>🦹 Double enrolment, live testnet</h3><div class="meta">Dry-run of <span class="mono">enrol(second_wallet, "district-9", tag(Household A's registration))</span> against the live component.</div><div class="row"><span>result</span><span class="bad">rejected</span></div><div class="row"><span>engine says</span><span class="mono">${LIVE.dupe_rejection}</span></div><div class="row"><span>what the chain learned about Household A</span><span>a 64-char salted hash</span></div>`
+  : `<h3>📒 The books</h3><div class="meta">Funds raised: <b>${LIVE.funds_raised} HEARTH</b> (public by design). Grants paid: <b>${fams.length}</b>. Individual amounts: <span class="sealed">hidden</span>.</div><div class="row"><span>Pick the auditor to reconcile</span><span>📜</span></div>`;
+ document.getElementById("impact").innerHTML=`<h3>📊 Public impact report</h3><div class="meta">What the template's <span class="mono">impact_report()</span> shows any donor or journalist. Counts only.</div>
+  <div class="row"><span>programme</span><span>${LIVE.programme}</span></div>
+  <div class="row"><span>households enrolled</span><span>${fams.length}</span></div>
+  <div class="row"><span>${LIVE.round_label}</span><span>${fams.length} grants</span></div>
+  <div class="row"><span>funds raised</span><span>${LIVE.funds_raised}</span></div>
+  <div class="row"><span>paid twice in a round</span><span class="ok">0 (enforced)</span></div>`;
+}
+document.getElementById("live").innerHTML=[
+ ["Template <b>Hearth</b>",`<a href="${ex("template",LIVE.template)}">${LIVE.template}</a>`],
+ ["Programme component",`<a href="${ex("substate",LIVE.component)}">${LIVE.component}</a>`],
+ ["Confidential HEARTH token (auditor view key locked on)",`<a href="${ex("substate",LIVE.resource)}">${LIVE.resource}</a>`],
+ ["Publish tx",`<a href="${ex("tx",LIVE.publish_tx)}">${LIVE.publish_tx}</a>`],
+ ["Open programme tx: 10,000 raised + 3 family wallets",`<a href="${ex("tx",LIVE.new_tx)}">${LIVE.new_tx}</a>`],
+ ["<b>Round 1 tx</b>: enrol ×3 · open_round · disburse_round (one transaction)",`<a href="${ex("tx",LIVE.round_tx)}">${LIVE.round_tx}</a>`],
+ ["Events in the round tx","HouseholdEnrolled ×3 · RoundOpened · <b>RoundDisbursed {round: 1, grants: 3}</b>. No amounts."]
+].map(r=>`<tr><td>${r[0]}</td><td class="mono">${r[1]}</td></tr>`).join("");
+render();
+</script>
+</body></html>
